@@ -1,0 +1,17 @@
+{
+  "mobile": {
+    "accuracy": 0.625,
+    "kappa": 0.4,
+    "judged": 8
+  },
+  "web": {
+    "accuracy": 0.75,
+    "kappa": 0.5325,
+    "judged": 12
+  },
+  "overall": {
+    "accuracy": 0.7,
+    "kappa": 0.476,
+    "judged": 20
+  }
+}

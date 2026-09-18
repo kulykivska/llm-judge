@@ -1,0 +1,20 @@
+{"case_id": "web-01", "verdict": "pass"}
+{"case_id": "web-02", "verdict": "pass"}
+{"case_id": "web-03", "verdict": "fail", "note": "cart count wrong; no error text anywhere"}
+{"case_id": "web-04", "verdict": "fail", "note": "crashed instead of redirecting"}
+{"case_id": "web-05", "verdict": "pass"}
+{"case_id": "web-06", "verdict": "blocked", "note": "storage was down for the whole run, not the app's fault"}
+{"case_id": "web-07", "verdict": "fail", "note": "partial translation is still a fail"}
+{"case_id": "web-08", "verdict": "fail", "note": "the request never fired"}
+{"case_id": "web-09", "verdict": "pass", "note": "slow, but the step has no timing requirement"}
+{"case_id": "web-10", "verdict": "pass"}
+{"case_id": "web-11", "verdict": "fail", "note": "generic message instead of the expected one"}
+{"case_id": "web-12", "verdict": "fail"}
+{"case_id": "mob-01", "verdict": "pass"}
+{"case_id": "mob-02", "verdict": "pass"}
+{"case_id": "mob-03", "verdict": "fail", "note": "deep link ignored"}
+{"case_id": "mob-04", "verdict": "blocked", "note": "simulator disk, environment problem"}
+{"case_id": "mob-05", "verdict": "fail"}
+{"case_id": "mob-06", "verdict": "pass"}
+{"case_id": "mob-07", "verdict": "fail", "note": "connected but unusable"}
+{"case_id": "mob-08", "verdict": "blocked", "note": "signing, not the feature"}

@@ -1,0 +1,21 @@
+[judge]
+name = "qa-step-verdict"
+version = "v3"
+verdicts = ["pass", "fail", "blocked"]
+temperature = 0.0
+
+system = """
+You judge one automated test step. Answer with one word on the last line:
+pass, fail or blocked. `blocked` means the environment stopped the test from
+saying anything about the feature - the build would not install, a dependency
+was down, the device ran out of disk. A feature that misbehaves is `fail`, not
+`blocked`.
+"""
+
+prompt = """
+Step: {step}
+Expected: {expected}
+Actual: {actual}
+
+Think in one sentence, then give the verdict on the last line.
+"""

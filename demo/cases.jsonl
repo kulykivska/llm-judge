@@ -1,0 +1,20 @@
+{"id": "web-01", "inputs": {"step": "Open /pricing and read the monthly price", "expected": "Monthly price is $29", "actual": "Monthly price is $29"}, "tags": {"surface": "web"}}
+{"id": "web-02", "inputs": {"step": "Submit the signup form with a taken email", "expected": "Inline error: this email is already registered", "actual": "Inline error: this email is already registered"}, "tags": {"surface": "web"}}
+{"id": "web-03", "inputs": {"step": "Add two items to the cart", "expected": "Cart badge shows 2", "actual": "Cart badge shows 0"}, "tags": {"surface": "web"}}
+{"id": "web-04", "inputs": {"step": "Open the dashboard as a signed-out visitor", "expected": "Redirected to /login", "actual": "Uncaught TypeError: cannot read properties of undefined"}, "tags": {"surface": "web"}}
+{"id": "web-05", "inputs": {"step": "Filter the orders table by 'refunded'", "expected": "Only refunded orders listed", "actual": "Only refunded orders listed"}, "tags": {"surface": "web"}}
+{"id": "web-06", "inputs": {"step": "Download the invoice PDF", "expected": "A PDF downloads", "actual": "Staging file storage returned 503 for every request in this run"}, "tags": {"surface": "web"}}
+{"id": "web-07", "inputs": {"step": "Change the language to Ukrainian", "expected": "Navigation is in Ukrainian", "actual": "Navigation is in Ukrainian, footer is still English"}, "tags": {"surface": "web"}}
+{"id": "web-08", "inputs": {"step": "Search for an order by id", "expected": "The matching order is shown", "actual": "No results, and the request never left the page"}, "tags": {"surface": "web"}}
+{"id": "web-09", "inputs": {"step": "Open the report for last quarter", "expected": "Report renders with four charts", "actual": "Report renders with four charts after a 9 second wait"}, "tags": {"surface": "web"}}
+{"id": "web-10", "inputs": {"step": "Delete a saved address", "expected": "Address disappears from the list", "actual": "Address disappears from the list"}, "tags": {"surface": "web"}}
+{"id": "web-11", "inputs": {"step": "Apply a expired discount code", "expected": "Message: this code has expired", "actual": "Message: something went wrong"}, "tags": {"surface": "web"}}
+{"id": "web-12", "inputs": {"step": "Open the pricing page on a 320px viewport", "expected": "No horizontal scrolling", "actual": "The page scrolls sideways by 40px"}, "tags": {"surface": "web"}}
+{"id": "mob-01", "inputs": {"step": "Sign in with Face ID", "expected": "The home screen appears", "actual": "The home screen appears"}, "tags": {"surface": "mobile"}}
+{"id": "mob-02", "inputs": {"step": "Pull to refresh the feed", "expected": "Newest post appears at the top", "actual": "Newest post appears at the top"}, "tags": {"surface": "mobile"}}
+{"id": "mob-03", "inputs": {"step": "Open a push notification about a new message", "expected": "The conversation opens", "actual": "The app opens on the feed"}, "tags": {"surface": "mobile"}}
+{"id": "mob-04", "inputs": {"step": "Record a voice note of 30 seconds", "expected": "The note is saved and playable", "actual": "Appium session died: the simulator ran out of disk"}, "tags": {"surface": "mobile"}}
+{"id": "mob-05", "inputs": {"step": "Switch the app to dark mode", "expected": "Every screen follows the system theme", "actual": "Settings screen stays light"}, "tags": {"surface": "mobile"}}
+{"id": "mob-06", "inputs": {"step": "Open the app with no network", "expected": "Offline banner, cached feed visible", "actual": "Offline banner, cached feed visible"}, "tags": {"surface": "mobile"}}
+{"id": "mob-07", "inputs": {"step": "Start a call from the contact screen", "expected": "The call connects", "actual": "The call connects, audio is one-way"}, "tags": {"surface": "mobile"}}
+{"id": "mob-08", "inputs": {"step": "Log out from settings", "expected": "Back to the login screen", "actual": "Error: build 412 is not signed for this device"}, "tags": {"surface": "mobile"}}

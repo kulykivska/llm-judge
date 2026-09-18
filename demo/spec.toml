@@ -1,0 +1,12 @@
+# Budgets for baseline-guard, so the judge is gated exactly like a model:
+# a prompt change that helps on average and wrecks one surface is a regression.
+
+[metrics.accuracy]
+direction = "higher"
+limit = 0.05
+aggregate_limit = 0.03
+
+[metrics.kappa]
+direction = "higher"
+limit = 0.05
+aggregate_limit = 0.03

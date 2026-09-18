@@ -1,0 +1,65 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "llm-judge"
+version = "0.1.0"
+description = "Measure an LLM judge against human labels before you trust it: agreement, Cohen's kappa, per-slice scores, self-consistency and a CI gate."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Yuliia Kulykivska" }]
+requires-python = ">=3.11"
+keywords = ["llm", "evaluation", "llm-as-judge", "agreement", "kappa", "ci", "mlops", "testing"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Software Development :: Testing",
+  "Typing :: Typed",
+]
+dependencies = []
+
+[project.optional-dependencies]
+anthropic = ["anthropic>=0.40"]
+dev = ["pytest>=8", "ruff>=0.6", "mypy>=1.11"]
+
+[project.scripts]
+llm-judge = "llm_judge.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/kulykivska/llm-judge"
+Issues = "https://github.com/kulykivska/llm-judge/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/llm_judge"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF", "S", "PL"]
+ignore = ["PLR0913"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "PLR2004"]
+
+[tool.mypy]
+files = ["src"]
+python_version = "3.11"
+strict = true
+
+[[tool.mypy.overrides]]
+# The SDK is an optional extra; the core is checked without it installed.
+module = ["anthropic"]
+ignore_missing_imports = true
