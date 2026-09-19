@@ -9,8 +9,9 @@ from dataclasses import asdict
 from pathlib import Path
 
 from . import __version__
-from .core import JudgeSpec, load_cases, load_judgements, load_labels, write_jsonl
+from .core import JudgeSpec, Model, load_cases, load_judgements, load_labels, write_jsonl
 from .metrics import agreement, by_slice, flakiness, results_json
+from .providers import PRESETS, ModelError, from_spec
 from .report import markdown
 from .runner import Cache, failures, run
 
@@ -19,15 +20,8 @@ EXIT_FAILED = 1
 EXIT_UNUSABLE = 2
 
 
-def _model(name: str):  # type: ignore[no-untyped-def]
-    if name.startswith("anthropic:"):
-        # Imported here so the core never needs the SDK installed.
-        from .providers import AnthropicModel  # noqa: PLC0415
-
-        return AnthropicModel(model=name.split(":", 1)[1] or "claude-sonnet-5")
-    raise SystemExit(
-        f"unknown model {name!r}: use anthropic:<model>, or call llm_judge.run() with your own"
-    )
+def _model(args: argparse.Namespace) -> Model:
+    return from_spec(args.model, base_url=args.base_url, api_key_env=args.api_key_env)
 
 
 def _run(args: argparse.Namespace) -> int:
@@ -37,7 +31,7 @@ def _run(args: argparse.Namespace) -> int:
     judgements = run(
         spec,
         cases,
-        _model(args.model),
+        _model(args),
         repeats=args.repeats,
         workers=args.workers,
         cache=cache,
@@ -93,7 +87,20 @@ def build_parser() -> argparse.ArgumentParser:
     runner.add_argument("--judge", required=True, help="judge spec (TOML)")
     runner.add_argument("--cases", required=True, help="cases (JSONL)")
     runner.add_argument("--out", required=True, help="where to write judgements (JSONL)")
-    runner.add_argument("--model", default="anthropic:claude-sonnet-5")
+    providers = ", ".join(["anthropic", "ollama", "chat", *sorted(PRESETS)])
+    runner.add_argument(
+        "--model",
+        default="anthropic:claude-sonnet-5",
+        help=f"provider:name. Providers: {providers}",
+    )
+    runner.add_argument(
+        "--base-url", default="", help="for a server of your own, or to override a preset"
+    )
+    runner.add_argument(
+        "--api-key-env",
+        default=None,
+        help="environment variable holding the key (empty for a server that wants none)",
+    )
     runner.add_argument(
         "--repeats", type=int, default=1, help="answers per case; 3 shows flakiness"
     )
@@ -120,7 +127,7 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
         result: int = args.func(args)
-    except (OSError, ValueError, KeyError) as exc:
+    except (OSError, ValueError, KeyError, ModelError) as exc:
         print(f"{exc}", file=sys.stderr)
         return EXIT_UNUSABLE
     return result

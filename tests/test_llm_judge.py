@@ -332,3 +332,14 @@ def test_the_demo_numbers_are_reproducible():
     assert score.kappa == 0.476
     blocked = next(s for s in score.per_class if s.verdict == "blocked")
     assert (blocked.support, blocked.recall) == (3, 0.0)
+
+
+def test_the_cache_survives_concurrent_writers(tmp_path: Path):
+    """Workers share one cache file; interleaved lines read back as corrupt JSON."""
+    model = ScriptedModel({}, default="pass")
+    cases = [case(f"c{i}", actual=f"outcome {i}") for i in range(40)]
+    cache = Cache(tmp_path / "cache.jsonl")
+    run(SPEC, cases, model, workers=8, cache=cache)
+    reread = Cache(tmp_path / "cache.jsonl")
+    run(SPEC, cases, model, workers=8, cache=reread)
+    assert len(model.calls) == 40

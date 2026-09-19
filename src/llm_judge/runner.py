@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import threading
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
@@ -25,6 +26,9 @@ class Cache:
 
     def __post_init__(self) -> None:
         self._entries: dict[str, str] = {}
+        # Workers share this: without the lock two threads interleave their
+        # lines in the file, and the cache reads back as corrupt JSON.
+        self._lock = threading.Lock()
         if self.path and self.path.exists():
             for line in self.path.read_text(encoding="utf-8").splitlines():
                 if line.strip():
@@ -32,15 +36,19 @@ class Cache:
                     self._entries[row["key"]] = row["raw"]
 
     def get(self, key: str) -> str | None:
-        return self._entries.get(key)
+        with self._lock:
+            return self._entries.get(key)
 
     def put(self, key: str, raw: str) -> None:
-        if self.path is None or key in self._entries:
+        if self.path is None:
             return
-        self._entries[key] = raw
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        with self.path.open("a", encoding="utf-8") as handle:
-            handle.write(json.dumps({"key": key, "raw": raw}, ensure_ascii=False) + "\n")
+        with self._lock:
+            if key in self._entries:
+                return
+            self._entries[key] = raw
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            with self.path.open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps({"key": key, "raw": raw}, ensure_ascii=False) + "\n")
 
 
 def cache_key(spec: JudgeSpec, prompt: str, repeat: int) -> str:
